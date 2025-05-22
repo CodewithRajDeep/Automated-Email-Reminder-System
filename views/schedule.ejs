@@ -41,7 +41,7 @@
   }
 </style>
 
-
+<!-- Schedule Section -->
 <section class="schedule-section">
   <div class="container">
     <div class="schedule-card">
@@ -54,17 +54,17 @@
         <p>Fill in the details below to schedule your email reminder</p>
       </div>
 
-     
+      <% if (typeof success !== 'undefined' && success) { %>
       <div class="alert alert-success d-flex align-items-center" role="alert">
         <i class="bi bi-check-circle-fill me-2"></i>
         <div>Reminder scheduled successfully!</div>
       </div>
-     
+      <% } %> <% if (typeof error !== 'undefined' && error) { %>
       <div class="alert alert-danger d-flex align-items-center" role="alert">
         <i class="bi bi-exclamation-triangle-fill me-2"></i>
         <div>Error scheduling reminder. Please try again.</div>
       </div>
-      
+      <% } %>
 
       <form action="/schedule" method="POST">
         <div class="mb-4">
