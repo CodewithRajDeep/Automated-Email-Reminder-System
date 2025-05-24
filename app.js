@@ -19,11 +19,30 @@ app.set('view engine', 'ejs');
 
 
 app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.set(expresseLayouts);
 app.set('layout', "layout");
 
 mongoose.connect(process.env.MONGO_DB_URL).then(() => {
-    console.log('connected to database');
+    console.log('connected to database...');
 }).catch((err) => {
     console.log(`Error: conncting to mongodb: ${err.message};`);
 });
+
+app.get('/', (req,res) => {
+    res.render('index', {
+        title: 'Email Reminder App',
+        currentPage: "home",
+    });
+})
+
+app.get('/about', (req, res) => {
+  res.render('about', {
+    title: 'About Email Reminder App',
+    currentPage: 'about'
+  });
+});
+
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, console.log(`Server is running on port ${PORT}`));
