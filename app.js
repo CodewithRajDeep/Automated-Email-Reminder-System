@@ -95,5 +95,30 @@ app.get('/reminders', async(req, res) => {
     res.redirect("/?error=true");
   }
 });
+
+cron.schedule("* * * * *", async () => {
+  try {
+    const now = new Date();
+    const reminders = await Reminder.find({
+      scheduleTime: { $lte: now },
+      sent: false,
+    });
+
+    for (const reminder of reminders) {
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: reminder.email,
+        subject: "Reminder",
+        text: reminder.message,
+      });
+
+      reminder.sent = true;
+      await reminder.save();
+    }
+  } catch (error) {
+    console.error("Error sending reminders:", error);
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, console.log(`Server is running on port ${PORT}`));
