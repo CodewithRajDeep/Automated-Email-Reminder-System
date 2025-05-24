@@ -82,5 +82,18 @@ app.post('/schedule', async (req, res) => {
   }
 });
 
+app.get('/reminders', async(req, res) => {
+  try {
+    const reminders = await Reminder.find().sort({scheduleTime:1});
+    res.render('reminders', {
+      reminders,
+      title: "My Reminders",
+      currentPage: "reminders",
+    });
+  } catch (error) {
+    console.error('Error saving reminder:', error.message || error);
+    res.redirect("/?error=true");
+  }
+});
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, console.log(`Server is running on port ${PORT}`));
