@@ -6,8 +6,7 @@ const path = require('path');
 const cron = require('node-cron');
 const nodemailer = require('nodemailer');
 const expressLayouts = require('express-ejs-layouts');
-const reminder = require('./models/reminder');
-
+const Reminder = require("./models/reminder");
 const app = express();
 
 app.use(express.urlencoded({extended:true}));
@@ -31,6 +30,13 @@ mongoose.connect(process.env.MONGO_DB_URL).then(() => {
     console.log(`Error: conncting to mongodb: ${err.message};`);
 });
 
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth:{
+    user:process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  }
+});
 app.get('/', (req,res) => {
     res.render('index', {
         title: 'Email Reminder App',
@@ -50,6 +56,30 @@ app.get('/schedule', (req, res) => {
     title: 'Schedule Reminder',
     currentPage: 'about'
   });
+});
+
+app.post('/schedule', async (req, res) => {
+  try {
+    const { email, message, datetime } = req.body;
+
+    console.log('Received:', { email, message, datetime });
+
+    if (!datetime || isNaN(new Date(datetime).getTime())) {
+      throw new Error('Invalid or missing dateTime');
+    }
+
+    const reminder = new Reminder({
+      email,
+      message,
+      scheduleTime: new Date(datetime),
+    });
+
+    await reminder.save();
+    res.redirect('/schedule?success=true');
+  } catch (error) {
+    console.error('Error saving reminder:', error.message || error);
+    res.redirect('/schedule?error=true');
+  }
 });
 
 const PORT = process.env.PORT || 3000;
