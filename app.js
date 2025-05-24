@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const cron = require('node-cron');
 const nodemailer = require('nodemailer');
-const expresseLayouts = require('express-ejs-layouts');
+const expressLayouts = require('express-ejs-layouts');
 const reminder = require('./models/reminder');
 
 const app = express();
@@ -21,8 +21,9 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.set(expresseLayouts);
-app.set('layout', "layout");
+
+app.use(expressLayouts);
+app.set('layout', 'layout');
 
 mongoose.connect(process.env.MONGO_DB_URL).then(() => {
     console.log('connected to database...');
@@ -44,5 +45,5 @@ app.get('/about', (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, console.log(`Server is running on port ${PORT}`));
