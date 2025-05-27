@@ -18,7 +18,7 @@ A simple, elegant web application to schedule email reminders and track their st
 9.[📬 Contact](#contact)
 
 ## <a name="description"> 🔍 About Reminder: </a> 
-Reminder is a lightweight Node.js application where users can schedule email reminders with a custom message and time. It leverages NodeMailer for sending emails and displays a status dashboard (Sent / Pending) using elegant Bootstrap UI components.
+Reminder is a lightweight Node.js application where users can schedule email reminders with a custom message and time. It leverages NodeMailer for sending emails and displays a status dashboard (Sent / Pending) using elegant Bootstrap UI component.
 
 ## <a name="features"> 🛠 Features: </a>
 - ✉️ Email Scheduling with message and custom time
